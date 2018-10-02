@@ -1,15 +1,16 @@
 package $package$.frontend.views
 
+import io.udash._
+import io.udash.bootstrap.UdashBootstrap
+import io.udash.bootstrap.button.UdashButton
+import io.udash.bootstrap.utils.BootstrapStyles.Color
+import io.udash.bootstrap.utils.{BootstrapStyles, ComponentId}
+import io.udash.css.CssView
+import io.udash.i18n.Lang
 import $package$.frontend.routing.RootState
 import $package$.frontend.services.TranslationsService
 import $package$.shared.css.GlobalStyles
 import $package$.shared.i18n.Translations
-import io.udash._
-import io.udash.bootstrap.UdashBootstrap.ComponentId
-import io.udash.bootstrap.button.{ButtonStyle, UdashButton}
-import io.udash.bootstrap.{BootstrapStyles, UdashBootstrap}
-import io.udash.css.CssView
-import io.udash.i18n.Lang
 
 class RootViewFactory(translationsService: TranslationsService) extends StaticViewFactory[RootState.type](
   () => new RootView(translationsService)
@@ -20,8 +21,8 @@ class RootView(translationsService: TranslationsService) extends ContainerView w
 
   private def langChangeButton(lang: Lang): Modifier  = {
     val btn = UdashButton(
-      buttonStyle = ButtonStyle.Link, componentId = ComponentId(s"lang-btn-\${lang.lang}")
-    )(lang.lang.toUpperCase())
+      buttonStyle = Color.Link.toProperty, componentId = ComponentId(s"lang-btn-\${lang.lang}")
+    )(_ => lang.lang.toUpperCase())
 
     btn.listen {
       case UdashButton.ButtonClickEvent(_, _) =>
@@ -40,10 +41,10 @@ class RootView(translationsService: TranslationsService) extends ContainerView w
 
     BootstrapStyles.container,
     div(
-      GlobalStyles.floatRight,
+      BootstrapStyles.Float.right(),
       Translations.langs.map(v => langChangeButton(Lang(v)))
     ),
-    h1("$name$"),
+    h1("Udash8"),
     childViewContainer
   )
 }

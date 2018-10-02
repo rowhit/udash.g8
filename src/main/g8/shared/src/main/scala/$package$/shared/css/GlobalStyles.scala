@@ -7,10 +7,6 @@ import scala.language.postfixOps
 object GlobalStyles extends CssBase {
   import dsl._
 
-  val floatRight: CssStyle = style(
-    float.right
-  )
-
   val messagesWindow: CssStyle = style(
     height :=! "calc(100vh - 220px)",
     overflowY.auto

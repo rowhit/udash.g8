@@ -16,6 +16,7 @@ object Translations {
   }
 
   object Auth {
+    val emptyInputError = key("auth.emptyStringError")
     val usernameFieldLabel = key("auth.username.label")
     val usernameFieldPlaceholder = key("auth.username.placeholder")
     val passwordFieldLabel = key("auth.password.label")

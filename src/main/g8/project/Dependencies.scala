@@ -16,7 +16,6 @@ object Dependencies {
   val logbackVersion = "1.2.3"
 
   // JS dependencies
-  val bootstrapVersion = "3.3.7-1"
   val highchartsVersion = "5.0.10"
 
   // Testing
@@ -43,7 +42,7 @@ object Dependencies {
     "io.udash" %%% "udash-auth-frontend" % udashVersion,
 
     // type-safe wrapper for Twitter Bootstrap
-    "io.udash" %%% "udash-bootstrap" % udashVersion,
+    "io.udash" %%% "udash-bootstrap4" % udashVersion,
     // type-safe wrapper for Highcharts
     "io.udash" %%% "udash-charts" % udashVersion,
     // type-safe wrapper for jQuery
@@ -53,10 +52,6 @@ object Dependencies {
   // JavaScript libraries dependencies
   // Those will be added into frontend-deps.js
   val frontendJSDeps = Def.setting(Seq(
-    // "jquery.js" is provided by "udash-jquery" dependency
-    "org.webjars" % "bootstrap" % bootstrapVersion /
-      "bootstrap.js" minified "bootstrap.min.js" dependsOn "jquery.js",
-
     // Highcharts JS files
     "org.webjars" % "highcharts" % highchartsVersion /
       s"\$highchartsVersion/highcharts.src.js" minified s"\$highchartsVersion/highcharts.js" dependsOn "jquery.js",

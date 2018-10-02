@@ -1,23 +1,23 @@
 package $package$.frontend.views.chat
 
-import $package$.frontend.services.TranslationsService
-import $package$.shared.css.ChatStyles
-import $package$.shared.i18n.Translations
 import io.udash._
-import io.udash.bootstrap.UdashBootstrap.ComponentId
-import io.udash.bootstrap.button.{ButtonStyle, UdashButton}
+import io.udash.bootstrap.button.UdashButton
+import io.udash.bootstrap.card.UdashCard
 import io.udash.bootstrap.form.{UdashForm, UdashInputGroup}
-import io.udash.bootstrap.panel.UdashPanel
+import io.udash.bootstrap.utils.BootstrapStyles.Color
+import io.udash.bootstrap.utils.ComponentId
 import io.udash.bootstrap.utils.UdashIcons.FontAwesome
 import io.udash.css._
 import io.udash.i18n._
+import $package$.frontend.services.TranslationsService
+import $package$.shared.css.ChatStyles
+import $package$.shared.i18n.Translations
 
 class ChatView(model: ModelProperty[ChatModel], presenter: ChatPresenter, translationsService: TranslationsService)
   extends FinalView with CssView {
 
-  import translationsService._
-
   import scalatags.JsDom.all._
+  import translationsService._
 
   private val messagesWindow = div(
     ChatStyles.messagesWindow,
@@ -39,38 +39,39 @@ class ChatView(model: ModelProperty[ChatModel], presenter: ChatPresenter, transl
 
   // Button from Udash Bootstrap wrapper
   private val submitButton = UdashButton(
-    buttonStyle = ButtonStyle.Primary,
-    block = true, componentId = ComponentId("send")
-  )(span(FontAwesome.send), tpe := "submit")
+    buttonStyle = Color.Primary.toProperty,
+    block = true.toProperty,
+    componentId = ComponentId("send")
+  )(_ => Seq[Modifier](span(FontAwesome.Brands.telegramPlane), tpe := "submit"))
 
-  private val msgForm = div(
-    UdashForm(
-      _ => {
-        presenter.sendMsg()
-        true // prevent default callback call
-      }
-    )(
-      componentId = ComponentId("msg-from"),
-
-      // disable form if user don't has write access
-      UdashForm.disabled(Property(!presenter.hasWriteAccess)) {
+  private val msgForm = UdashForm(componentId = ComponentId("msg-from"))(factory => Seq[Modifier](
+    // disable form if user don't has write access
+    factory.disabled(Property(!presenter.hasWriteAccess)) { nested =>
+      nested(
         UdashInputGroup()(
           UdashInputGroup.input(msgInput.render),
-          UdashInputGroup.buttons(submitButton.render)
-        ).render
-      }
-    ).render
-  )
+          UdashInputGroup.appendButton(submitButton.render)
+        )
+      )
+    }
+  ))
+
+  msgForm.listen {
+    case UdashForm.FormEvent(_, UdashForm.FormEvent.EventType.Submit) =>
+      presenter.sendMsg()
+  }
 
   override def getTemplate: Modifier = div(
-    UdashPanel(componentId = ComponentId("chat-panel"))(
-      UdashPanel.heading(
-        produce(model.subProp(_.connectionsCount)) { count =>
-          span(translatedDynamic(Translations.Chat.connections)(_.apply(count))).render
-        }
+    UdashCard(componentId = ComponentId("chat-panel"))(factory => Seq[Modifier](
+      factory.header(nested =>
+        nested(
+          produce(model.subProp(_.connectionsCount)) { count =>
+            span(translatedDynamic(Translations.Chat.connections)(_.apply(count))).render
+          }
+        )
       ),
-      UdashPanel.body(messagesWindow),
-      UdashPanel.footer(msgForm)
-    ).render
+      factory.body(_ => messagesWindow),
+      factory.footer(_ => msgForm)
+    )).render
   )
 }
