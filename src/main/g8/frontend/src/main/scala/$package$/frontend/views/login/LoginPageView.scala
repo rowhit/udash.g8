@@ -47,20 +47,20 @@ class LoginPageView(
   private def usernameInput(factory: UdashForm#FormElementsFactory) = {
     factory.input.formGroup()(
       input = _ => factory.input.textInput(model.subProp(_.username), inputId = ComponentId("username"))(
-        nested => Some(nested(translatedAttrDynamic(Translations.Auth.usernameFieldPlaceholder, "placeholder")(_.apply())))
+        Some(nested => nested(translatedAttrDynamic(Translations.Auth.usernameFieldPlaceholder, "placeholder")(_.apply())))
       ).render,
-      labelContent = nested => Some(Seq[Modifier](nested(translatedDynamic(Translations.Auth.usernameFieldLabel)(_.apply())), " ", infoIcon)),
-      invalidFeedback = nested => Some(nested(translatedDynamic(Translations.Auth.emptyInputError)(_.apply()))),
+      labelContent = Some(nested => Seq[Modifier](nested(translatedDynamic(Translations.Auth.usernameFieldLabel)(_.apply())), " ", infoIcon)),
+      invalidFeedback = Some(nested => nested(translatedDynamic(Translations.Auth.emptyInputError)(_.apply()))),
     )
   }
 
   private def passwordInput(factory: UdashForm#FormElementsFactory) = {
     factory.input.formGroup()(
       input = _ => factory.input.passwordInput(model.subProp(_.password), inputId = ComponentId("password"))(
-        nested => Some(nested(translatedAttrDynamic(Translations.Auth.passwordFieldPlaceholder, "placeholder")(_.apply())))
+        Some(nested => nested(translatedAttrDynamic(Translations.Auth.passwordFieldPlaceholder, "placeholder")(_.apply())))
       ).render,
-      labelContent = nested => Some(nested(translatedDynamic(Translations.Auth.passwordFieldLabel)(_.apply()))),
-      invalidFeedback = nested => Some(nested(translatedDynamic(Translations.Auth.emptyInputError)(_.apply()))),
+      labelContent = Some(nested => nested(translatedDynamic(Translations.Auth.passwordFieldLabel)(_.apply()))),
+      invalidFeedback = Some(nested => nested(translatedDynamic(Translations.Auth.emptyInputError)(_.apply()))),
     )
   }
 

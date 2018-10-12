@@ -9,7 +9,6 @@ import io.udash.css.CssView
 import io.udash.i18n.Lang
 import $package$.frontend.routing.RootState
 import $package$.frontend.services.TranslationsService
-import $package$.shared.css.GlobalStyles
 import $package$.shared.i18n.Translations
 
 class RootViewFactory(translationsService: TranslationsService) extends StaticViewFactory[RootState.type](
